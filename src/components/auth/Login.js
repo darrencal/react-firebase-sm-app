@@ -3,10 +3,15 @@ import {
   Button,
   Center,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
+  Link,
+  Text,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
+import { REGISTER } from '../../routes';
 
 export default function Login() {
   return (
@@ -17,18 +22,42 @@ export default function Login() {
         </Heading>
 
         <form onSubmit={() => {}}>
-          <FormControl>
+          <FormControl isInvalid={true} py='2'>
             <FormLabel>Email</FormLabel>
             <Input type='email' placeholder='example@email.com'></Input>
+            <FormErrorMessage>This is an error</FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={true} py='2'>
             <FormLabel>Password</FormLabel>
             <Input type='password'></Input>
+            <FormErrorMessage>This is an error</FormErrorMessage>
           </FormControl>
-          <Button type='submit' mt='4' colorScheme='teal' size='md' w='full'>
+          <Button
+            type='submit'
+            mt='4'
+            colorScheme='teal'
+            size='md'
+            w='full'
+            isLoading={true}
+            loadingText='Logging In'
+          >
             Log In
           </Button>
         </form>
+
+        <Text fontSize='xl' align='center' mt='6'>
+          Don't have an account?{' '}
+          <Link
+            as={RouterLink}
+            to={REGISTER}
+            color='teal.800'
+            fontWeight='medium'
+            textDecor='underline'
+            _hover={{ background: 'teal.100' }}
+          >
+            Register
+          </Link>
+        </Text>
       </Box>
     </Center>
   );

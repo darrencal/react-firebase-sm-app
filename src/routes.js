@@ -1,15 +1,24 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Layout from './components/Layout';
+import Dashboard from './components/Dashboard';
 
 export const ROOT = '/';
+export const DASHBOARD = '/dashboard';
 export const LOGIN = '/login';
 export const REGISTER = '/register';
 
 export const router = createBrowserRouter([
   {
     path: ROOT,
-    element: 'My App',
+    element: <Layout />,
+    children: [
+      {
+        path: DASHBOARD,
+        element: <Dashboard />,
+      },
+    ],
   },
   {
     path: LOGIN,
