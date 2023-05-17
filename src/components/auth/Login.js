@@ -24,14 +24,11 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
   async function handleLogin({ email, password }) {
-    const succeeded = await login({ email, password, redirectTo: DASHBOARD });
-
-    if (succeeded) reset();
+    login({ email, password, redirectTo: DASHBOARD });
   }
 
   return (

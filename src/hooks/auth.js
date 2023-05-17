@@ -1,10 +1,15 @@
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
+import { COLLECTION_USERS, auth, db } from '../firebase';
 import { useState } from 'react';
 import { DASHBOARD, LOGIN } from '../routes';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
+import checkUsernameExists from '../utils/check-username-exists';
 
 export function useAuth() {
   const [authUser, isLoading, error] = useAuthState(auth);
@@ -51,6 +56,72 @@ export function useLogin() {
   }
 
   return { login, isLoading };
+}
+
+export function useRegister() {
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  async function register({
+    username,
+    email,
+    password,
+    redirectTo = DASHBOARD,
+  }) {
+    setIsLoading(true);
+
+    const usernameExists = await checkUsernameExists(username);
+
+    if (usernameExists) {
+      toast({
+        title: 'Username is already taken.',
+        status: 'error',
+        isClosable: true,
+        position: 'top',
+        duration: 5000,
+      });
+
+      setIsLoading(false);
+    } else {
+      try {
+        // Create auth user
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Create user profile
+        await setDoc(doc(db, COLLECTION_USERS, res.user.uid), {
+          id: res.user.uid,
+          username: username.toLowerCase(),
+          avatar: '',
+          created: Date.now(),
+        });
+
+        toast({
+          title: 'Account created!',
+          description: 'Welcome to the app.',
+          status: 'success',
+          isClosable: true,
+          position: 'top',
+          duration: 5000,
+        });
+
+        navigate(redirectTo);
+      } catch (error) {
+        toast({
+          title: 'Registration failed.',
+          description: error.message,
+          status: 'error',
+          isClosable: true,
+          position: 'top',
+          duration: 5000,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
+  return { register, isLoading };
 }
 
 export function useLogout() {
