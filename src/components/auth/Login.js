@@ -72,7 +72,7 @@ export default function Login() {
           </Button>
         </form>
 
-        <Text fontSize='xl' align='center' mt='6'>
+        <Text align='center' mt='6'>
           Don't have an account?{' '}
           <Link
             as={RouterLink}

@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { LOGIN } from '../../routes';
 import { useAuth } from '../../hooks/auth';
 import { useEffect } from 'react';
+import Navbar from './Navbar';
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -18,8 +19,9 @@ export default function Layout() {
   }
 
   return (
-    <div>
-      Layout <Outlet />
-    </div>
+    <>
+      <Navbar />
+      <Outlet />
+    </>
   );
 }
