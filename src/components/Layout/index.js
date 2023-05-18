@@ -9,14 +9,10 @@ export default function Layout() {
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!user) {
-      navigate(LOGIN);
-    }
-  }, [user]);
+    if (!isLoading && !user) navigate(LOGIN);
+  }, [isLoading, user]);
 
-  if (isLoading) {
-    return 'Loading...';
-  }
+  if (isLoading) return 'Loading...';
 
   return (
     <>
